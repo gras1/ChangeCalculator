@@ -7,10 +7,26 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     private TransactionRequest _intitialTransactionRequest;
     private TransactionRequest _givenTransactionRequest;
     private TransactionRequest _whenTransactionRequest;
+    private List<Denomination> _availableDenominations;
+    private ChangeHandler _changeHandler;
     
     public ChangeHandlerTests()
     {
         _intitialTransactionRequest = new TransactionRequest("GBP", 0m, 0m);
+        _availableDenominations = new List<Denomination>{
+            Denomination1,
+            Denomination2,
+            Denomination5,
+            Denomination10,
+            Denomination20,
+            Denomination50,
+            Denomination100,
+            Denomination200,
+            Denomination500,
+            Denomination1000,
+            Denomination2000,
+            Denomination5000};
+        _changeHandler = new ChangeHandler();
     }
 
     [Given(@"the customer buys something for £5.50")]
@@ -30,10 +46,9 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     {
         //arrange
         var expected = new TransactionResponse(new Dictionary<Denomination, int>());
-        var changeHandler = new ChangeHandler();
         
         //act
-        var actual = changeHandler.CalculateChange(_whenTransactionRequest, new List<Denomination>());
+        var actual = _changeHandler.CalculateChange(_whenTransactionRequest, new List<Denomination>());
 
         //assert
         actual.Should().BeEquivalentTo(expected);
@@ -49,15 +64,10 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     public void IExpectToReceiveOnePoundCoinInChangeBack()
     {
         //arrange
-        var denomination = new Denomination("GBP", "One Pound Coin", 1.0m);
-        var availableDenominations = new List<Denomination>{ denomination };
-        var denominations = new Dictionary<Denomination, int>();
-        denominations.Add(denomination, 1);
-        var expected = new TransactionResponse(denominations);
-        var changeHandler = new ChangeHandler();
+        var expected = new TransactionResponse(new Dictionary<Denomination, int>{ {Denomination100, 1} });
         
         //act
-        var actual = changeHandler.CalculateChange(_whenTransactionRequest, availableDenominations);
+        var actual = _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
@@ -73,42 +83,60 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     public void IExpectToReceiveFourteenPoundsFiftyPenceChangeBack()
     {
         //arrange
-        var denomination1 = new Denomination("GBP", "One Pence Coin", 0.01m);
-        var denomination2 = new Denomination("GBP", "Two Pence Coin", 0.02m);
-        var denomination5 = new Denomination("GBP", "Five Pence Coin", 0.05m);
-        var denomination10 = new Denomination("GBP", "Ten Pence Coin", 0.1m);
-        var denomination20 = new Denomination("GBP", "Twenty Pence Coin", 0.2m);
-        var denomination50 = new Denomination("GBP", "Fifty Pence Coin", 0.5m);
-        var denomination100 = new Denomination("GBP", "One Pound Coin", 1.0m);
-        var denomination200 = new Denomination("GBP", "Two Pounds Coin", 2.0m);
-        var denomination500 = new Denomination("GBP", "Five Pounds Note", 5.0m);
-        var denomination1000 = new Denomination("GBP", "Ten Pounds Note", 10.0m);
-        var denomination2000 = new Denomination("GBP", "Twenty Pounds Note", 20.0m);
-        var denomination5000 = new Denomination("GBP", "Fifty Pounds Note", 50.0m);
-        var availableDenominations = new List<Denomination>{
-            denomination1,
-            denomination2,
-            denomination5,
-            denomination10,
-            denomination20,
-            denomination50,
-            denomination100,
-            denomination200,
-            denomination500,
-            denomination1000,
-            denomination2000,
-            denomination5000};
-        var denominations = new Dictionary<Denomination, int>();
-        denominations.Add(denomination1000, 1);
-        denominations.Add(denomination200, 2);
-        denominations.Add(denomination50, 1);
-        var expected = new TransactionResponse(denominations);
-        var changeHandler = new ChangeHandler();
+        var expected = new TransactionResponse(new Dictionary<Denomination, int>{
+            {Denomination1000, 1},
+            {Denomination200, 2},
+            {Denomination50, 1}});
         
         //act
-        var actual = changeHandler.CalculateChange(_whenTransactionRequest, availableDenominations);
+        var actual = _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
+
+    [And(@"I don't have the correct change")]
+    public void IDontHaveTheCorrectChange()
+    {
+        _availableDenominations = new List<Denomination>{ Denomination5000 };
+    }
+
+    [Then(@"I expect a TransactionFailedException to be thrown stating correct change not available")]
+    public void IExpectATransactionFailedExceptionToBeThrownStatingCorrectChangeNotAvailable()
+    {
+        //act
+        Action act = () => _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
+
+        //assert
+        act.Should().Throw<TransactionFailedException>().WithMessage("Correct change not available");
+    }
+
+    [And(@"There is no change available")]
+    public void ThereIsNoChangeAvailable()
+    {
+        _availableDenominations = new List<Denomination>();
+    }
+
+    [Then(@"I expect a TransactionFailedException to be thrown stating no change available")]
+    public void IExpectATransactionFailedExceptionToBeThrownStatingNoChangeAvailable()
+    {
+        //act
+        Action act = () => _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
+
+        //assert
+        act.Should().Throw<TransactionFailedException>().WithMessage("No change available");
+    }
+
+    private Denomination Denomination1 = new Denomination("GBP", "One Pence Coin", 0.01m);
+    private Denomination Denomination2 = new Denomination("GBP", "Two Pence Coin", 0.02m);
+    private Denomination Denomination5 = new Denomination("GBP", "Five Pence Coin", 0.05m);
+    private Denomination Denomination10 = new Denomination("GBP", "Ten Pence Coin", 0.1m);
+    private Denomination Denomination20 = new Denomination("GBP", "Twenty Pence Coin", 0.2m);
+    private Denomination Denomination50 = new Denomination("GBP", "Fifty Pence Coin", 0.5m);
+    private Denomination Denomination100 = new Denomination("GBP", "One Pound Coin", 1.0m);
+    private Denomination Denomination200 = new Denomination("GBP", "Two Pounds Coin", 2.0m);
+    private Denomination Denomination500 = new Denomination("GBP", "Five Pounds Note", 5.0m);
+    private Denomination Denomination1000 = new Denomination("GBP", "Ten Pounds Note", 10.0m);
+    private Denomination Denomination2000 = new Denomination("GBP", "Twenty Pounds Note", 20.0m);
+    private Denomination Denomination5000 = new Denomination("GBP", "Fifty Pounds Note", 50.0m);
 }

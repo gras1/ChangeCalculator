@@ -1,4 +1,4 @@
-namespace Equifax.Net.ChangeCalculator.Shared;
+namespace Equifax.Net.ChangeCalculator.Shared.Models;
 
 public class TransactionResponse
 {

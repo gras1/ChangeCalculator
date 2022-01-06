@@ -20,6 +20,10 @@ public class ChangeHandler : IChangeHandler
                 transactionResponse.Change.Add(new Denomination(denomination.Currency, denomination.Description, denomination.Value), quantity);
             }
         }
+        if (remainingTotal > 0.0m)
+        {
+            throw new TransactionFailedException("Correct change not available");
+        }
         return transactionResponse;
     }
 }
