@@ -11,6 +11,10 @@ public class ChangeHandler : IChangeHandler
         }
         var remainingTotal = request.AmountOfCash - request.Cost;
         var availableDenominations = denominations.Where(d => d.Currency == request.Currency).OrderByDescending(d => d.Value);
+        if (!availableDenominations.Any())
+        {
+            throw new TransactionFailedException("No change available");
+        }
         foreach (var denomination in availableDenominations)
         {
             var quantity = (int)(remainingTotal / denomination.Value);
