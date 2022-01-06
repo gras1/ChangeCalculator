@@ -1,0 +1,43 @@
+1. in the Terminal window from the repo root, create a solution file, type:
+dotnet new sln --name Equifax.Net.ChangeCalculator
+
+2. in the Terminal window from the repo root, type:
+dotnet new classlib -f net6.0 -n Equifax.Net.ChangeCalculator.Logic
+
+3. add the project reference to the solution, in the Terminal window from the repo root, type:
+dotnet sln add ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+
+4. in the Terminal window from the repo root, type:
+dotnet new xunit -f net6.0 -n Equifax.Net.ChangeCalculator.Logic.Tests
+
+5. add the project reference to the solution, in the Terminal window from the repo root, type:
+dotnet sln add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculator.Logic.Tests.csproj
+
+6. add the inter project references, in the Terminal window from the repo root, type:
+dotnet add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculator.Logic.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+
+7. in the Terminal window from the repo root, type:
+dotnet new classlib -f net6.0 -n Equifax.Net.ChangeCalculator.Shared
+
+8. add the project reference to the solution, in the Terminal window from the repo root, type:
+dotnet sln add ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+
+9. add the inter project references, in the Terminal window from the repo root, type:
+dotnet add ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculator.Logic.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+
+10. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Logic.Tests folder, then type:
+dotnet add package FluentAssertions
+dotnet add package Microsoft.AspNetCore.Mvc.Testing
+dotnet add package FakeItEasy
+dotnet add package Xunit.Gherkin.Quick
+
+11. Create a folder called `features` under the Equifax.Net.ChangeCalculator.Logic.Tests folder  
+- Add a file called ChangeCalculatorSpecs.feature to the features folder 
+- Add the following to Equifax.Net.ChangeCalculator.Logic.Tests.csproj:  
+
+    <ItemGroup>
+        <None Update="features\ChangeCalculatorSpecs.feature">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
