@@ -142,6 +142,34 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
         act.Should().NotThrow<TransactionFailedException>();
         actual.Should().BeEquivalentTo(expected);
     }
+    
+
+    [Given(@"a purchase costs £(\d+\.?\d*)")]
+    public void APurchaseCostsAnAmount(decimal cost)
+    {
+        _givenTransactionRequest = _intitialTransactionRequest with { Cost = cost };
+    }
+
+    [When(@"the customer gives £(\d+\.?\d*)")]
+    public void TheCustomerGives(decimal amountOfCash)
+    {
+        _whenTransactionRequest = _givenTransactionRequest with { AmountOfCash = amountOfCash };
+    }
+
+    [Then(@"I expect to receive £(\d+\.?\d*) as the correct change")]
+    public void IExpectToReceiveTheCorrectChange(decimal totalChange)
+    {
+        //act
+        var actual = _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
+
+        //assert
+        var actualTotalChange = 0.0m;
+        foreach (var actualChange in actual.Change)
+        {
+            actualTotalChange = actualTotalChange + (actualChange.Key.Value * actualChange.Value);
+        }
+        actualTotalChange.Should().Be(totalChange);
+    }
 
     private Denomination Denomination1 = new Denomination("GBP", "One Pence Coin", 0.01m);
     private Denomination Denomination2 = new Denomination("GBP", "Two Pence Coin", 0.02m);

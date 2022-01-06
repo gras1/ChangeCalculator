@@ -35,3 +35,8 @@ Scenario: Exact amount doesn't return any change and there is no change availabl
 	When the customer gives me £5.50 exactly
     And There is no change available
 	Then I don't expect to receive any change back and a TransactionFailedException is not thrown
+
+Scenario: A purchase that returns the correct change
+	Given a purchase costs £123.40
+	When the customer gives £195.23
+	Then I expect to receive £71.83 as the correct change
