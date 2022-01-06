@@ -4,7 +4,7 @@ public class ChangeHandler : IChangeHandler
 {
     public TransactionResponse CalculateChange(TransactionRequest request)
     {
-        var transactionResponse = new TransactionResponse(new Dictionary<Denomination, decimal>(), 0m);
+        var transactionResponse = new TransactionResponse(new Dictionary<Denomination, int>());
         if (request.AmountOfCash == request.Cost)
         {
             return transactionResponse;

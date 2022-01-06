@@ -28,11 +28,37 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     [Then(@"I don't expect to receive any change back")]
     public void IDontExpectToReceiveAnyChangeBack()
     {
-        var expected = new TransactionResponse(new Dictionary<Denomination, decimal>(), 0m);
+        //arrange
+        var expected = new TransactionResponse(new Dictionary<Denomination, int>());
         var changeHandler = new ChangeHandler();
         
+        //act
         var actual = changeHandler.CalculateChange(_whenTransactionRequest);
 
-        actual.TotalChange.Should().Be(expected.TotalChange);
+        //assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [When(@"the customer gives me £6.50")]
+    public void TheCustomerGivesMeSixPoundsFifty()
+    {
+        _whenTransactionRequest = _givenTransactionRequest with { AmountOfCash = 6.5m };
+    }
+
+    [Then(@"I expect to receive a £1 coin in change back")]
+    public void IExpectToReceiveOnePoundCoinInChangeBack()
+    {
+        //arrange
+        var denomination = new Denomination("GBP", "One Pound Coin", 1.0m);
+        var denominations = new Dictionary<Denomination, int>();
+        denominations.Add(denomination, 1);
+        var expected = new TransactionResponse(denominations);
+        var changeHandler = new ChangeHandler();
+        
+        //act
+        var actual = changeHandler.CalculateChange(_whenTransactionRequest);
+
+        //assert
+        actual.Should().BeEquivalentTo(expected);
     }
 }
