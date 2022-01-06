@@ -29,3 +29,9 @@ Scenario: No change available
 	When the customer gives me £20
     And There is no change available
 	Then I expect a TransactionFailedException to be thrown stating no change available
+
+Scenario: Exact amount doesn't return any change and there is no change available
+	Given the customer buys something for £5.50
+	When the customer gives me £5.50 exactly
+    And There is no change available
+	Then I don't expect to receive any change back and a TransactionFailedException is not thrown

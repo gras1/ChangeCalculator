@@ -98,7 +98,7 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     [And(@"I don't have the correct change")]
     public void IDontHaveTheCorrectChange()
     {
-        _availableDenominations = new List<Denomination>{ Denomination5000 };
+        _availableDenominations = new List<Denomination>{ {new Denomination("GBP", "Five Hundred Million Pound Note - that's hyper inflation for you!", 500_000_000.0m)} };
     }
 
     [Then(@"I expect a TransactionFailedException to be thrown stating correct change not available")]
@@ -125,6 +125,22 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
 
         //assert
         act.Should().Throw<TransactionFailedException>().WithMessage("No change available");
+    }
+
+    [Then(@"I don't expect to receive any change back and a TransactionFailedException is not thrown")]
+    public void IDontExpectToReceiveAnyChangeBackAndATransactionFailedExceptionIsNotThrown()
+    {
+        //arrange
+        var actual = new TransactionResponse(new Dictionary<Denomination, int>{ { new Denomination("USD", "test", 0.05m), 1 }});
+        var expected = new TransactionResponse(new Dictionary<Denomination, int>());
+
+        //act
+        Action act = () => actual = _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
+        act.Invoke();
+
+        //assert
+        act.Should().NotThrow<TransactionFailedException>();
+        actual.Should().BeEquivalentTo(expected);
     }
 
     private Denomination Denomination1 = new Denomination("GBP", "One Pence Coin", 0.01m);
