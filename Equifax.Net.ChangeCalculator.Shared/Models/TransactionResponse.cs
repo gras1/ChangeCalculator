@@ -2,10 +2,10 @@ namespace Equifax.Net.ChangeCalculator.Shared.Models;
 
 public class TransactionResponse
 {
-    public TransactionResponse(List<Change> change)
+    public TransactionResponse(List<string> change)
     {
         Change = change;
     }
 
-    public List<Change> Change {get; private set;}
+    public List<string> Change {get; private set;}
 }
