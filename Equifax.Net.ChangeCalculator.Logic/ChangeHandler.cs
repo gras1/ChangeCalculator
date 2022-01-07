@@ -2,9 +2,9 @@
 
 public class ChangeHandler : IChangeHandler
 {
-    public TransactionResponse CalculateChange(TransactionRequest request, IEnumerable<Denomination> denominations)
+    public ChangeCalculation CalculateChange(TransactionRequest request, IEnumerable<Denomination> denominations)
     {
-        var transactionResponse = new TransactionResponse(new Dictionary<Denomination, int>());
+        var transactionResponse = new ChangeCalculation(new Dictionary<Denomination, int>());
         if (request.AmountOfCash == request.Cost)
         {
             return transactionResponse;

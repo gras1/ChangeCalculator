@@ -29,7 +29,6 @@ dotnet add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculat
 10. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Logic.Tests folder, then type:
 dotnet add package FluentAssertions
 dotnet add package Microsoft.AspNetCore.Mvc.Testing
-dotnet add package FakeItEasy
 dotnet add package Xunit.Gherkin.Quick
 
 11. Create a folder called `features` under the Equifax.Net.ChangeCalculator.Logic.Tests folder  
@@ -41,3 +40,47 @@ dotnet add package Xunit.Gherkin.Quick
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+12. in the Terminal window from the repo root, type:
+dotnet new webapi -f net6.0 -n Equifax.Net.ChangeCalculator.Api
+
+13. add the project reference to the solution, in the Terminal window from the repo root, type:
+dotnet sln add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj
+
+14. in the Terminal window from the repo root, type:
+dotnet new xunit -f net6.0 -n Equifax.Net.ChangeCalculator.Api.Tests
+
+15. add the project reference to the solution, in the Terminal window from the repo root, type:
+dotnet sln add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj
+
+16. add the inter project references, in the Terminal window from the repo root, type:
+dotnet add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj reference ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+
+17. add the inter project references, in the Terminal window from the repo root, type:
+dotnet add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj
+dotnet add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+
+18. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Api.Tests folder, then type:
+dotnet add package FluentAssertions
+dotnet add package Microsoft.AspNetCore.Mvc.Testing
+dotnet add package FakeItEasy
+dotnet add package Xunit.Gherkin.Quick
+
+19. Create a folder called `features` under the Equifax.Net.ChangeCalculator.Api.Tests folder  
+- Add a file called ControllerSpecs.feature to the features folder 
+- Add the following to Equifax.Net.ChangeCalculator.Api.Tests.csproj:  
+
+    <ItemGroup>
+        <None Update="features\ControllerSpecs.feature">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+20. Add the following to Equifax.Net.ChangeCalculator.Api.csproj under the <ImplicitUsings> xml element: 
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+21. After removing the Weather Forecast boiler-plate code you get with a new Api project and adding some bare bones implementation code, on my first run of the application using the Swagger UI, after submitting a test POST request, I got an error back where System.Text.Json can’t serialize Dictionary. I had to change the Dictionaries in the TransactionResponse to a List and introduce a new class called Change. This meant I had to introduce a Change to TransactionResponse converter.

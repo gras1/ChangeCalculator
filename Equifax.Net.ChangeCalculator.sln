@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equifax.Net.ChangeCalculato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equifax.Net.ChangeCalculator.Shared", "Equifax.Net.ChangeCalculator.Shared\Equifax.Net.ChangeCalculator.Shared.csproj", "{8429628A-E359-4D53-B80E-7AF4B3627E88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equifax.Net.ChangeCalculator.Api", "Equifax.Net.ChangeCalculator.Api\Equifax.Net.ChangeCalculator.Api.csproj", "{CE195CEF-B92B-4DCF-AE46-2F81866BF2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equifax.Net.ChangeCalculator.Api.Tests", "Equifax.Net.ChangeCalculator.Api.Tests\Equifax.Net.ChangeCalculator.Api.Tests.csproj", "{E0C69E58-8A41-42CE-8770-029D99C21656}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{8429628A-E359-4D53-B80E-7AF4B3627E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8429628A-E359-4D53-B80E-7AF4B3627E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8429628A-E359-4D53-B80E-7AF4B3627E88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE195CEF-B92B-4DCF-AE46-2F81866BF2A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE195CEF-B92B-4DCF-AE46-2F81866BF2A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE195CEF-B92B-4DCF-AE46-2F81866BF2A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE195CEF-B92B-4DCF-AE46-2F81866BF2A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0C69E58-8A41-42CE-8770-029D99C21656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0C69E58-8A41-42CE-8770-029D99C21656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0C69E58-8A41-42CE-8770-029D99C21656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0C69E58-8A41-42CE-8770-029D99C21656}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

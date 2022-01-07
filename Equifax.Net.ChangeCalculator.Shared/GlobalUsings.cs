@@ -1,1 +1,1 @@
-global using System.Text;
+global using Equifax.Net.ChangeCalculator.Shared.Models;

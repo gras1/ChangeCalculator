@@ -45,7 +45,7 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     public void IDontExpectToReceiveAnyChangeBack()
     {
         //arrange
-        var expected = new TransactionResponse(new Dictionary<Denomination, int>());
+        var expected = new ChangeCalculation(new Dictionary<Denomination, int>());
         
         //act
         var actual = _changeHandler.CalculateChange(_whenTransactionRequest, new List<Denomination>());
@@ -64,7 +64,7 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     public void IExpectToReceiveOnePoundCoinInChangeBack()
     {
         //arrange
-        var expected = new TransactionResponse(new Dictionary<Denomination, int>{ {Denomination100, 1} });
+        var expected = new ChangeCalculation(new Dictionary<Denomination, int>{ {Denomination100, 1} });
         
         //act
         var actual = _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);
@@ -83,7 +83,7 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     public void IExpectToReceiveFourteenPoundsFiftyPenceChangeBack()
     {
         //arrange
-        var expected = new TransactionResponse(new Dictionary<Denomination, int>{
+        var expected = new ChangeCalculation(new Dictionary<Denomination, int>{
             {Denomination1000, 1},
             {Denomination200, 2},
             {Denomination50, 1}});
@@ -131,8 +131,8 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
     public void IDontExpectToReceiveAnyChangeBackAndATransactionFailedExceptionIsNotThrown()
     {
         //arrange
-        var actual = new TransactionResponse(new Dictionary<Denomination, int>{ { new Denomination("USD", "test", 0.05m), 1 }});
-        var expected = new TransactionResponse(new Dictionary<Denomination, int>());
+        var actual = new ChangeCalculation(new Dictionary<Denomination, int>{ { new Denomination("USD", "test", 0.05m), 1 }});
+        var expected = new ChangeCalculation(new Dictionary<Denomination, int>());
 
         //act
         Action act = () => actual = _changeHandler.CalculateChange(_whenTransactionRequest, _availableDenominations);

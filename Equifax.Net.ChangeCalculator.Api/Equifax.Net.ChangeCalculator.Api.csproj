@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Equifax.Net.ChangeCalculator.Shared\Equifax.Net.ChangeCalculator.Shared.csproj" />
+    <ProjectReference Include="..\Equifax.Net.ChangeCalculator.Logic\Equifax.Net.ChangeCalculator.Logic.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="7.2.0" />
     <PackageReference Include="FluentAssertions" Version="6.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
@@ -24,12 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Equifax.Net.ChangeCalculator.Logic\Equifax.Net.ChangeCalculator.Logic.csproj" />
+    <ProjectReference Include="..\Equifax.Net.ChangeCalculator.Api\Equifax.Net.ChangeCalculator.Api.csproj" />
     <ProjectReference Include="..\Equifax.Net.ChangeCalculator.Shared\Equifax.Net.ChangeCalculator.Shared.csproj" />
+    <ProjectReference Include="..\Equifax.Net.ChangeCalculator.Logic\Equifax.Net.ChangeCalculator.Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="features\ChangeCalculatorSpecs.feature">
+    <None Update="features\ControllerSpecs.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
