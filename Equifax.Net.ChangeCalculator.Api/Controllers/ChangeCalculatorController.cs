@@ -1,3 +1,5 @@
+using ValidationException = Equifax.Net.ChangeCalculator.Shared.Exceptions.ValidationException;
+
 namespace Equifax.Net.ChangeCalculator.Api.Controllers;
 
 [ApiController]
@@ -21,13 +23,13 @@ public class ChangeCalculatorController : ControllerBase
     [HttpPost()]
     public ActionResult Post([FromBody] TransactionRequest request)
     {
-        var validator = new TransactionRequestValidator();
-        var results = validator.Validate(request);
-        if (!results.IsValid)
+        try
         {
-            var failures = results.Errors.Select(err => err.ErrorMessage).ToArray();
-            //TODO logging
-            return new BadRequestObjectResult((String.Join(" ", failures, 0, failures.Count())).Trim());
+            ValidateRequest(request);
+        }
+        catch (ValidationException ex)
+        {
+            return new BadRequestObjectResult(ex.Message);
         }
 
         try
@@ -45,6 +47,21 @@ public class ChangeCalculatorController : ControllerBase
         {
             //TODO logging
             return new StatusCodeResult(500);
+        }
+    }
+
+    private void ValidateRequest(TransactionRequest request)
+    {
+        if (request == default(TransactionRequest))
+        {
+            throw new ValidationException("request parameter cannot be default");
+        }
+        var validator = new TransactionRequestValidator();
+        var results = validator.Validate(request);
+        if (!results.IsValid)
+        {
+            var failures = results.Errors.Select(err => err.ErrorMessage).ToArray();
+            throw new ValidationException((String.Join(" ", failures, 0, failures.Count())).Trim());
         }
     }
 }

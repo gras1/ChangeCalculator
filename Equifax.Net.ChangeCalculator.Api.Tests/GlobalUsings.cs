@@ -13,3 +13,4 @@ global using Equifax.Net.ChangeCalculator.Logic;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using FakeItEasy;
+global using Microsoft.AspNetCore.Mvc;

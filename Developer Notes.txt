@@ -49,6 +49,7 @@ dotnet sln add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.A
 
 14. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Api folder, then type:
 dotnet add package FluentValidation
+dotnet add package Ardalis.GuardClauses
 
 15. in the Terminal window from the repo root, type:
 dotnet new xunit -f net6.0 -n Equifax.Net.ChangeCalculator.Api.Tests
