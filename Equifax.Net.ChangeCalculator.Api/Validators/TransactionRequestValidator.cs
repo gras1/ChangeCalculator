@@ -6,7 +6,7 @@ public class TransactionRequestValidator : AbstractValidator<TransactionRequest>
     RuleFor(x => x.Cost).GreaterThan(0.0m);
     RuleFor(customer => customer.AmountOfCash).GreaterThanOrEqualTo(customer => customer.Cost);
     RuleFor(x => x.Currency).NotEmpty();
-    RuleFor(x => x.Currency).MinimumLength(3);
-    RuleFor(x => x.Currency).MaximumLength(3);
+    RuleFor(x => x.Currency).MinimumLength(3).WithMessage("The length of 'Currency' must be 3 characters.");
+    RuleFor(x => x.Currency).MaximumLength(3).WithMessage("The length of 'Currency' must be 3 characters.");
   }    
 }

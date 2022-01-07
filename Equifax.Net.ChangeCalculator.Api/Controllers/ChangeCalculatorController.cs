@@ -37,9 +37,9 @@ public class ChangeCalculatorController : ControllerBase
         var results = validator.Validate(request);
         if (!results.IsValid)
         {
-            var failures = results.Errors;
+            var failures = results.Errors.Select(err => err.ErrorMessage).ToArray();
             //TODO logging
-            return new BadRequestObjectResult(String.Join(",", failures.SelectMany(f => f.ErrorMessage)));
+            return new BadRequestObjectResult((String.Join(" ", failures, 0, failures.Count())).Trim());
         }
 
         try
