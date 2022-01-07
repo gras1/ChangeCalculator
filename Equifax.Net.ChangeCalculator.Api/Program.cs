@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.Configure<List<Denomination>>(builder.Configuration.GetSection("Denominations"));
+
 builder.Services.AddScoped<IChangeHandler, ChangeHandler>();
 builder.Services.AddScoped<IChangeCalculationToTransactionResponseMapper, ChangeCalculationToTransactionResponseMapper>();
 
