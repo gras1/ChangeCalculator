@@ -31,9 +31,17 @@ public class ChangeCalculatorController : ControllerBase
     }
 
     [HttpPost()]
-    public ActionResult Post(TransactionRequest request)
+    public ActionResult Post([FromBody] TransactionRequest request)
     {
-        //TODO TransactionRequest validation
+        var validator = new TransactionRequestValidator();
+        var results = validator.Validate(request);
+        if (!results.IsValid)
+        {
+            var failures = results.Errors;
+            //TODO logging
+            return new BadRequestObjectResult(String.Join(",", failures.SelectMany(f => f.ErrorMessage)));
+        }
+
         try
         {
             var changeCalculation = _changeHandler.CalculateChange(request, _denominations);
@@ -43,9 +51,9 @@ public class ChangeCalculatorController : ControllerBase
         catch (TransactionFailedException ex)
         {
             //TODO logging
-            return new ObjectResult(ex.Message) {StatusCode = 500};
+            return new NotFoundObjectResult(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             //TODO logging
             return new StatusCodeResult(500);

@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="features\ControllerSpecs.feature">
+    <None Update="features\ChangeCalculatorControllerSpecs.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
