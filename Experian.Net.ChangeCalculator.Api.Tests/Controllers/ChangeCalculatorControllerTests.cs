@@ -1,15 +1,20 @@
 namespace Experian.Net.ChangeCalculator.Api.Tests.Controllers;
 
 [ExcludeFromCodeCoverage]
+[FeatureFile("./features/ChangeCalculatorControllerSpecs.feature")]
 #pragma warning disable xUnit1013 // Public method should be marked as test
-public class ChangeCalculatorControllerTests
+public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
 {
     private readonly ILogger<ChangeCalculatorController> _logger;
     private readonly IChangeHandler _changeHandler;
     private readonly IChangeCalculationToTransactionResponseMapper _mapper;
     private readonly IOptions<List<Denomination>> _options;
     private readonly ChangeCalculatorController _controller;
-    
+    private HttpClient _client;
+    private TransactionRequest _intitialTransactionRequest;
+    private TransactionRequest _givenTransactionRequest;
+    private TransactionRequest _whenTransactionRequest;
+
     public ChangeCalculatorControllerTests()
     {
         _logger = A.Fake<ILogger<ChangeCalculatorController>>();
@@ -17,6 +22,86 @@ public class ChangeCalculatorControllerTests
         _mapper = A.Fake<IChangeCalculationToTransactionResponseMapper>();
         _options = A.Fake<IOptions<List<Denomination>>>();
         _controller = new ChangeCalculatorController(_logger, _changeHandler, _mapper, _options);
+
+        var application = new WebApplicationFactory<Program>();
+        var clientOptions = new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = true,
+            BaseAddress = new Uri("http://localhost:5164")
+        };
+        _client = application.CreateClient(clientOptions);
+        _intitialTransactionRequest = new TransactionRequest("GBP", 0m, 0m);
+    }
+
+    [Given(@"the customer buys something for £5.50")]
+    public void CustomerBuysSomethingForFivePoundsFifty()
+    {
+        _givenTransactionRequest = _intitialTransactionRequest with { Cost = 5.5m };
+    }
+
+    [When(@"the customer gives me £20")]
+    public void TheCustomerGivesMeTwentyPounds()
+    {
+        _whenTransactionRequest = _givenTransactionRequest with { AmountOfCash = 20.0m };
+    }
+
+    [Then(@"I expect to receive £14.50 in change back")]
+    public async Task IExpectToReceiveFourteenPoundsFiftyPenceChangeBack()
+    {
+        //arrange
+        string jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        var expectedTransactionResponse = new TransactionResponse(
+            new List<string> {
+                "1 x £10",
+                "2 x £2",
+                "1 x 50p"
+            });
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        //act
+        var actualResponse = await _client.PostAsync("/ChangeCalculator", content);
+
+        //assert
+        actualResponse.IsSuccessStatusCode.Should().BeTrue();
+
+        var response = await actualResponse.Content.ReadAsStringAsync();
+        var actualTransactionResponse = JsonSerializer.Deserialize<TransactionResponse>(response, options);
+
+        actualTransactionResponse.Should().BeEquivalentTo(expectedTransactionResponse);
+    }
+
+    [When(@"the customer gives me £5.50 exactly")]
+    public void TheCustomerGivesMeFivePoundsFifty()
+    {
+        _whenTransactionRequest = _givenTransactionRequest with { AmountOfCash = 5.5m };
+    }
+
+    [Then(@"I don't expect to receive any change back")]
+    public async Task IDontExpectToReceiveAnyChangeBack()
+    {
+        //arrange
+        string jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        var expectedTransactionResponse = new TransactionResponse(new List<string>());
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        //act
+        var actualResponse = await _client.PostAsync("/ChangeCalculator", content);
+
+        //assert
+        actualResponse.IsSuccessStatusCode.Should().BeTrue();
+
+        var response = await actualResponse.Content.ReadAsStringAsync();
+        var actualTransactionResponse = JsonSerializer.Deserialize<TransactionResponse>(response, options);
+
+        actualTransactionResponse.Should().BeEquivalentTo(expectedTransactionResponse);
     }
 
     [Fact]
