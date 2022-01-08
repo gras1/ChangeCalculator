@@ -1,45 +1,45 @@
 1. in the Terminal window from the repo root, create a solution file, type:
-dotnet new sln --name Equifax.Net.ChangeCalculator
+dotnet new sln --name Experian.Net.ChangeCalculator
 
 2. in the Terminal window from the repo root, type:
-dotnet new classlib -f net6.0 -n Equifax.Net.ChangeCalculator.Logic
+dotnet new classlib -f net6.0 -n Experian.Net.ChangeCalculator.Logic
 
-3. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Logic folder, then type:
+3. in the Terminal window cd in to the Experian.Net.ChangeCalculator.Logic folder, then type:
 dotnet add package Ardalis.GuardClauses
 
 4. add the project reference to the solution, in the Terminal window from the repo root, type:
-dotnet sln add ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+dotnet sln add ./Experian.Net.ChangeCalculator.Logic/Experian.Net.ChangeCalculator.Logic.csproj
 
 5. in the Terminal window from the repo root, type:
-dotnet new xunit -f net6.0 -n Equifax.Net.ChangeCalculator.Logic.Tests
+dotnet new xunit -f net6.0 -n Experian.Net.ChangeCalculator.Logic.Tests
 
 6. add the project reference to the solution, in the Terminal window from the repo root, type:
-dotnet sln add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculator.Logic.Tests.csproj
+dotnet sln add ./Experian.Net.ChangeCalculator.Logic.Tests/Experian.Net.ChangeCalculator.Logic.Tests.csproj
 
 7. add the inter project references, in the Terminal window from the repo root, type:
-dotnet add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculator.Logic.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Logic.Tests/Experian.Net.ChangeCalculator.Logic.Tests.csproj reference ./Experian.Net.ChangeCalculator.Logic/Experian.Net.ChangeCalculator.Logic.csproj
 
 8. in the Terminal window from the repo root, type:
-dotnet new classlib -f net6.0 -n Equifax.Net.ChangeCalculator.Shared
+dotnet new classlib -f net6.0 -n Experian.Net.ChangeCalculator.Shared
 
-9. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Shared folder, then type:
+9. in the Terminal window cd in to the Experian.Net.ChangeCalculator.Shared folder, then type:
 dotnet add package Ardalis.GuardClauses
 
 10. add the project reference to the solution, in the Terminal window from the repo root, type:
-dotnet sln add ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+dotnet sln add ./Experian.Net.ChangeCalculator.Shared/Experian.Net.ChangeCalculator.Shared.csproj
 
 11. add the inter project references, in the Terminal window from the repo root, type:
-dotnet add ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
-dotnet add ./Equifax.Net.ChangeCalculator.Logic.Tests/Equifax.Net.ChangeCalculator.Logic.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Logic/Experian.Net.ChangeCalculator.Logic.csproj reference ./Experian.Net.ChangeCalculator.Shared/Experian.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Logic.Tests/Experian.Net.ChangeCalculator.Logic.Tests.csproj reference ./Experian.Net.ChangeCalculator.Shared/Experian.Net.ChangeCalculator.Shared.csproj
 
-12. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Logic.Tests folder, then type:
+12. in the Terminal window cd in to the Experian.Net.ChangeCalculator.Logic.Tests folder, then type:
 dotnet add package FluentAssertions
 dotnet add package Microsoft.AspNetCore.Mvc.Testing
 dotnet add package Xunit.Gherkin.Quick
 
-13. Create a folder called `features` under the Equifax.Net.ChangeCalculator.Logic.Tests folder  
+13. Create a folder called `features` under the Experian.Net.ChangeCalculator.Logic.Tests folder  
 - Add a file called ChangeCalculatorSpecs.feature to the features folder 
-- Add the following to Equifax.Net.ChangeCalculator.Logic.Tests.csproj:  
+- Add the following to Experian.Net.ChangeCalculator.Logic.Tests.csproj:  
 
     <ItemGroup>
         <None Update="features\ChangeCalculatorSpecs.feature">
@@ -48,39 +48,39 @@ dotnet add package Xunit.Gherkin.Quick
     </ItemGroup>
 
 14. in the Terminal window from the repo root, type:
-dotnet new webapi -f net6.0 -n Equifax.Net.ChangeCalculator.Api
+dotnet new webapi -f net6.0 -n Experian.Net.ChangeCalculator.Api
 
 15. add the project reference to the solution, in the Terminal window from the repo root, type:
-dotnet sln add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj
+dotnet sln add ./Experian.Net.ChangeCalculator.Api/Experian.Net.ChangeCalculator.Api.csproj
 
-16. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Api folder, then type:
+16. in the Terminal window cd in to the Experian.Net.ChangeCalculator.Api folder, then type:
 dotnet add package FluentValidation
 dotnet add package Ardalis.GuardClauses
 
 17. in the Terminal window from the repo root, type:
-dotnet new xunit -f net6.0 -n Equifax.Net.ChangeCalculator.Api.Tests
+dotnet new xunit -f net6.0 -n Experian.Net.ChangeCalculator.Api.Tests
 
 18. add the project reference to the solution, in the Terminal window from the repo root, type:
-dotnet sln add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj
+dotnet sln add ./Experian.Net.ChangeCalculator.Api.Tests/Experian.Net.ChangeCalculator.Api.Tests.csproj
 
 19. add the inter project references, in the Terminal window from the repo root, type:
-dotnet add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
-dotnet add ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj reference ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Api/Experian.Net.ChangeCalculator.Api.csproj reference ./Experian.Net.ChangeCalculator.Shared/Experian.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Api/Experian.Net.ChangeCalculator.Api.csproj reference ./Experian.Net.ChangeCalculator.Logic/Experian.Net.ChangeCalculator.Logic.csproj
 
 20. add the inter project references, in the Terminal window from the repo root, type:
-dotnet add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Api/Equifax.Net.ChangeCalculator.Api.csproj
-dotnet add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Shared/Equifax.Net.ChangeCalculator.Shared.csproj
-dotnet add ./Equifax.Net.ChangeCalculator.Api.Tests/Equifax.Net.ChangeCalculator.Api.Tests.csproj reference ./Equifax.Net.ChangeCalculator.Logic/Equifax.Net.ChangeCalculator.Logic.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Api.Tests/Experian.Net.ChangeCalculator.Api.Tests.csproj reference ./Experian.Net.ChangeCalculator.Api/Experian.Net.ChangeCalculator.Api.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Api.Tests/Experian.Net.ChangeCalculator.Api.Tests.csproj reference ./Experian.Net.ChangeCalculator.Shared/Experian.Net.ChangeCalculator.Shared.csproj
+dotnet add ./Experian.Net.ChangeCalculator.Api.Tests/Experian.Net.ChangeCalculator.Api.Tests.csproj reference ./Experian.Net.ChangeCalculator.Logic/Experian.Net.ChangeCalculator.Logic.csproj
 
-21. in the Terminal window cd in to the Equifax.Net.ChangeCalculator.Api.Tests folder, then type:
+21. in the Terminal window cd in to the Experian.Net.ChangeCalculator.Api.Tests folder, then type:
 dotnet add package FluentAssertions
 dotnet add package Microsoft.AspNetCore.Mvc.Testing
 dotnet add package FakeItEasy
 dotnet add package Xunit.Gherkin.Quick
 
-22. Create a folder called `features` under the Equifax.Net.ChangeCalculator.Api.Tests folder  
+22. Create a folder called `features` under the Experian.Net.ChangeCalculator.Api.Tests folder  
 - Add a file called ControllerSpecs.feature to the features folder 
-- Add the following to Equifax.Net.ChangeCalculator.Api.Tests.csproj:  
+- Add the following to Experian.Net.ChangeCalculator.Api.Tests.csproj:  
 
     <ItemGroup>
         <None Update="features\ControllerSpecs.feature">
@@ -88,7 +88,7 @@ dotnet add package Xunit.Gherkin.Quick
         </None>
     </ItemGroup>
 
-23. Add the following to Equifax.Net.ChangeCalculator.Api.csproj under the <ImplicitUsings> xml element: 
+23. Add the following to Experian.Net.ChangeCalculator.Api.csproj under the <ImplicitUsings> xml element: 
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>

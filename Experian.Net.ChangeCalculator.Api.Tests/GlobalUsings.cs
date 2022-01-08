@@ -1,0 +1,17 @@
+global using System;
+global using System.Diagnostics.CodeAnalysis;
+global using Xunit;
+global using Xunit.Gherkin.Quick;
+global using Experian.Net.ChangeCalculator.Shared.Models;
+global using System.Collections.Generic;
+global using FluentAssertions;
+global using Experian.Net.ChangeCalculator.Shared.Exceptions;
+global using System.Linq;
+global using Experian.Net.ChangeCalculator.Api.Controllers;
+global using Experian.Net.ChangeCalculator.Api.Mappers;
+global using Experian.Net.ChangeCalculator.Logic;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
+global using FakeItEasy;
+global using Microsoft.AspNetCore.Mvc;
+global using Experian.Net.ChangeCalculator.Shared.Dtos;

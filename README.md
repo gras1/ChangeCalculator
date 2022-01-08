@@ -22,4 +22,4 @@ Example:
 
 4. in a Terminal window cd in to the ChangeCalcuator root folder and type 'dotnet test' - to run all unit tests
 
-5. in a Terminal window cd in to the Equifax.Net.ChangeCalcuator.Api project folder and type 'dotnet run', then in a browser go to http://localhost:5164/index.html. This presents the swagger window. Click the 'Try it out' button, use the following values: Currency: "GBP", AmountOfCash: 20, Cost: 5.50 and click the 'Execute' button. Once it has successfully run, take a look at the response body and it should provide the correct list of change as listed above.
+5. in a Terminal window cd in to the Experian.Net.ChangeCalcuator.Api project folder and type 'dotnet run', then in a browser go to http://localhost:5164/index.html. This presents the swagger window. Click the 'Try it out' button, use the following values: Currency: "GBP", AmountOfCash: 20, Cost: 5.50 and click the 'Execute' button. Once it has successfully run, take a look at the response body and it should provide the correct list of change as listed above.
