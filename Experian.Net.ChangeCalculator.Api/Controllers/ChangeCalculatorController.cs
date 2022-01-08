@@ -69,5 +69,9 @@ public class ChangeCalculatorController : ControllerBase
             var failures = results.Errors.Select(err => err.ErrorMessage).ToArray();
             throw new ValidationException((String.Join(" ", failures, 0, failures.Count())).Trim());
         }
+        if (request.AmountOfCash < request.Cost)
+        {
+            throw new ValidationException("Not enough money to make the purchase");
+        }
     }
 }
