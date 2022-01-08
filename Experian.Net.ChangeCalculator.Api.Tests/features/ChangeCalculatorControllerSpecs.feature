@@ -12,3 +12,8 @@ Scenario: Simple calculation that doesn't return any change
 	Given the customer buys something for £5.50
 	When the customer gives me £5.50 exactly
 	Then I don't expect to receive any change back
+
+Scenario: Attempts a purchase without enough money
+	Given the customer buys something for £5.50
+	When the customer gives me £1
+	Then A bad request is returned that states there is 'Not enough money to make the purchase'

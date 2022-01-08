@@ -104,6 +104,30 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
         actualTransactionResponse.Should().BeEquivalentTo(expectedTransactionResponse);
     }
 
+    [When(@"the customer gives me £1")]
+    public void TheCustomerGivesMeOnePound()
+    {
+        _whenTransactionRequest = _givenTransactionRequest with { AmountOfCash = 1.0m };
+    }
+
+    [Then(@"A bad request is returned that states there is 'Not enough money to make the purchase'")]
+    public async Task ABadRequestIsReturnedThatStatesThereIsNotEnoughMoneyToMakeThePurchase()
+    {
+        //arrange
+        string jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+        //act
+        var actualResponse = await _client.PostAsync("/ChangeCalculator", content);
+
+        //assert
+        actualResponse.IsSuccessStatusCode.Should().BeFalse();
+        ((int)actualResponse.StatusCode).Should().Be(400);
+
+        var response = await actualResponse.Content.ReadAsStringAsync();
+        response.Should().Be("Not enough money to make the purchase");
+    }
+
     [Fact]
     public void Post_WithDefaultRequest_ReturnsBadRequestObjectResult()
     {
