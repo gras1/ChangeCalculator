@@ -190,7 +190,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
         //assert
         Assert.NotNull(badRequestObjectResult);
         badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("'Amount Of Cash' must be greater than or equal to '2.0'.");
+        ((string)badRequestObjectResult?.Value!).Should().Be("Not enough money to make the purchase");
     }
 
     [Fact]
@@ -207,7 +207,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
         //assert
         Assert.NotNull(badRequestObjectResult);
         badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("'Amount Of Cash' must be greater than '0.0'. 'Amount Of Cash' must be greater than or equal to '2.0'.");
+        ((string)badRequestObjectResult?.Value!).Should().Be("'Amount Of Cash' must be greater than '0.0'.");
     }
 
     [Fact]
