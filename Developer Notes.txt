@@ -97,9 +97,12 @@ dotnet add package Xunit.Gherkin.Quick
 
 
 TODO:
-1. Sort out 400 bad request CORS response issue
+1. Sort out 400 bad request CORS response issue, via proxy?
 2. Add logging
 3. Add quantities to denominations
-4. React styling could be improved for the response
-5. Split out integration tests from unit tests
-6. Async requests?
+4. add some front-end input validation!
+5. front-end styling could be improved for the response
+6. Split out integration tests from unit tests in Api
+7. Add Jest unit tests for react front-end
+8. Async requests?
+9. Host in the cloud
