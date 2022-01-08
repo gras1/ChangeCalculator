@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Experian Change Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style>
+    span.gbp {
+        float: left;
+        text-align: left;
+    }
+
+    span.gbp::before {
+        float: left;
+        content: "\00a3"; /* £ */
+        padding: 3px 4px 3px 3px;
+    }
+
+    span.gbp input {
+        width: 100px !important;
+    }
+
+    span.gbp label {
+        margin-left: 10px;
+    }
+
+    .clear {
+      clear: both;
+      padding-top: 10px;
+    }
+
+    .app fieldset {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <img alt="Experian logo.svg" src="//upload.wikimedia.org/wikipedia/commons/thumb/3/31/Experian_logo.svg/220px-Experian_logo.svg.png" decoding="async" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/3/31/Experian_logo.svg/330px-Experian_logo.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/3/31/Experian_logo.svg/440px-Experian_logo.svg.png 2x" data-file-width="283" data-file-height="94" width="220" height="73">
+  
+  <h1>Change Calculator</h1>
+
+  <div id="root" class="app"></div>
+  
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+  <script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
+
+  <script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js"> </script>
+
+  <script type="text/babel" src="main.js"></script>
+</body>
+
+</html>
