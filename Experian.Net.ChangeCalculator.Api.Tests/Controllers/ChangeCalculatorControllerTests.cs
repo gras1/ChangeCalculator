@@ -3,12 +3,13 @@ namespace Experian.Net.ChangeCalculator.Api.Tests.Controllers;
 [ExcludeFromCodeCoverage]
 [FeatureFile("./features/ChangeCalculatorControllerSpecs.feature")]
 #pragma warning disable xUnit1013 // Public method should be marked as test
-public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
+public class ChangeCalculatorControllerTests : Feature
 {
     private readonly ILogger<ChangeCalculatorController> _logger;
     private readonly IChangeHandler _changeHandler;
     private readonly IChangeCalculationToTransactionResponseMapper _mapper;
     private readonly IOptions<List<Denomination>> _options;
+    private readonly IRequestValidator _validator;
     private readonly ChangeCalculatorController _controller;
     private HttpClient _client;
     private TransactionRequest _intitialTransactionRequest;
@@ -21,7 +22,8 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
         _changeHandler = A.Fake<IChangeHandler>();
         _mapper = A.Fake<IChangeCalculationToTransactionResponseMapper>();
         _options = A.Fake<IOptions<List<Denomination>>>();
-        _controller = new ChangeCalculatorController(_logger, _changeHandler, _mapper, _options);
+        _validator = A.Fake<IRequestValidator>();
+        _controller = new ChangeCalculatorController(_logger, _changeHandler, _mapper, _options, _validator);
 
         var application = new WebApplicationFactory<Program>();
         var clientOptions = new WebApplicationFactoryClientOptions
@@ -49,7 +51,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
     public async Task IExpectToReceiveFourteenPoundsFiftyPenceChangeBack()
     {
         //arrange
-        string jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
+        var jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
         var expectedTransactionResponse = new TransactionResponse(
             new List<string> {
@@ -84,7 +86,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
     public async Task IDontExpectToReceiveAnyChangeBack()
     {
         //arrange
-        string jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
+        var jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
         var expectedTransactionResponse = new TransactionResponse(new List<string>());
         var options = new JsonSerializerOptions
@@ -114,7 +116,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
     public async Task ABadRequestIsReturnedThatStatesThereIsNotEnoughMoneyToMakeThePurchase()
     {
         //arrange
-        string jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
+        var jsonString = JsonSerializer.Serialize(_whenTransactionRequest);
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
         //act
@@ -129,109 +131,10 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
     }
 
     [Fact]
-    public void Post_WithDefaultRequest_ReturnsBadRequestObjectResult()
-    {
-        //act
-        ActionResult actionResult = _controller.Post(default(TransactionRequest));
-        var response = actionResult;
-        var badRequestObjectResult = response as BadRequestObjectResult;
-
-        //assert
-        Assert.NotNull(badRequestObjectResult);
-        badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("request parameter cannot be default");
-    }
-
-    [Fact]
-    public void Post_WithInvalidCurrency1Request_ReturnsBadRequestObjectResult()
-    {
-        //arrange
-        TransactionRequest request = new TransactionRequest("test", 2.01m, 2.0m);
-
-        //act
-        ActionResult actionResult = _controller.Post(request);
-        var response = actionResult;
-        var badRequestObjectResult = response as BadRequestObjectResult;
-
-        //assert
-        Assert.NotNull(badRequestObjectResult);
-        badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("The length of 'Currency' must be 3 characters.");
-    }
-
-    [Fact]
-    public void Post_WithInvalidCurrency2Request_ReturnsBadRequestObjectResult()
-    {
-        //arrange
-        TransactionRequest request = new TransactionRequest("t", 2.01m, 2.0m);
-
-        //act
-        ActionResult actionResult = _controller.Post(request);
-        var response = actionResult;
-        var badRequestObjectResult = response as BadRequestObjectResult;
-
-        //assert
-        Assert.NotNull(badRequestObjectResult);
-        badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("The length of 'Currency' must be 3 characters.");
-    }
-
-    [Fact]
-    public void Post_WithInvalidAmountOfCash1Request_ReturnsBadRequestObjectResult()
-    {
-        //arrange
-        TransactionRequest request = new TransactionRequest("GBP", 1.9m, 2.0m);
-
-        //act
-        ActionResult actionResult = _controller.Post(request);
-        var response = actionResult;
-        var badRequestObjectResult = response as BadRequestObjectResult;
-
-        //assert
-        Assert.NotNull(badRequestObjectResult);
-        badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("Not enough money to make the purchase");
-    }
-
-    [Fact]
-    public void Post_WithInvalidAmountOfCash2Request_ReturnsBadRequestObjectResult()
-    {
-        //arrange
-        TransactionRequest request = new TransactionRequest("GBP", 0.0m, 2.0m);
-
-        //act
-        ActionResult actionResult = _controller.Post(request);
-        var response = actionResult;
-        var badRequestObjectResult = response as BadRequestObjectResult;
-
-        //assert
-        Assert.NotNull(badRequestObjectResult);
-        badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("'Amount Of Cash' must be greater than '0.0'.");
-    }
-
-    [Fact]
-    public void Post_WithInvalidCost1Request_ReturnsBadRequestObjectResult()
-    {
-        //arrange
-        TransactionRequest request = new TransactionRequest("GBP", 2.0m, 0.0m);
-
-        //act
-        ActionResult actionResult = _controller.Post(request);
-        var response = actionResult;
-        var badRequestObjectResult = response as BadRequestObjectResult;
-
-        //assert
-        Assert.NotNull(badRequestObjectResult);
-        badRequestObjectResult?.StatusCode.Should().Be(400);
-        ((string)badRequestObjectResult?.Value!).Should().Be("'Cost' must be greater than '0.0'.");
-    }
-
-    [Fact]
     public void Post_WhenCalculateChangeThrowsTransactionFailedException_ReturnsNotFoundObjectResult()
     {
         //arrange
-        TransactionRequest request = new TransactionRequest("GBP", 2.0m, 1.0m);
+        var request = new TransactionRequest("GBP", 2.0m, 1.0m);
         A.CallTo(() => _changeHandler.CalculateChange(A<TransactionRequest>.Ignored, A<IEnumerable<Denomination>>.Ignored)).Throws(new TransactionFailedException("test"));
 
         //act
@@ -249,7 +152,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
     public void Post_WhenCalculateChangeThrowsException_ReturnsStatusCodeResult()
     {
         //arrange
-        TransactionRequest request = new TransactionRequest("GBP", 2.0m, 1.0m);
+        var request = new TransactionRequest("GBP", 2.0m, 1.0m);
         A.CallTo(() => _changeHandler.CalculateChange(A<TransactionRequest>.Ignored, A<IEnumerable<Denomination>>.Ignored)).Throws(new Exception());
 
         //act
@@ -266,7 +169,7 @@ public class ChangeCalculatorControllerTests : Xunit.Gherkin.Quick.Feature
     public void Post_WhenMapThrowsArgumentNullException_ReturnsStatusCodeResult()
     {
         //arrange
-        TransactionRequest request = new TransactionRequest("GBP", 2.0m, 1.0m);
+        var request = new TransactionRequest("GBP", 2.0m, 1.0m);
         var changeCalculation = new ChangeCalculation(new Dictionary<Denomination, int>());
         A.CallTo(() => _changeHandler.CalculateChange(A<TransactionRequest>.Ignored, A<IEnumerable<Denomination>>.Ignored)).Returns(changeCalculation);
         A.CallTo(() => _mapper.Map(A<ChangeCalculation>.Ignored)).Throws(new ArgumentNullException());

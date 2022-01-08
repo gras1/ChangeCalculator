@@ -18,6 +18,7 @@ builder.Services.Configure<List<Denomination>>(builder.Configuration.GetSection(
 
 builder.Services.AddScoped<IChangeHandler, ChangeHandler>();
 builder.Services.AddScoped<IChangeCalculationToTransactionResponseMapper, ChangeCalculationToTransactionResponseMapper>();
+builder.Services.AddScoped<IRequestValidator, RequestValidator>();
 
 builder.Services.AddCors(options =>
 {

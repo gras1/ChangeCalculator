@@ -1,5 +1,3 @@
-using ValidationException = Experian.Net.ChangeCalculator.Shared.Exceptions.ValidationException;
-
 namespace Experian.Net.ChangeCalculator.Api.Controllers;
 
 [ApiController]
@@ -10,14 +8,17 @@ public class ChangeCalculatorController : ControllerBase
     private readonly IChangeHandler _changeHandler;
     private readonly IChangeCalculationToTransactionResponseMapper _mapper;
     private readonly List<Denomination> _denominations;
+    private readonly IRequestValidator _validator;
 
     public ChangeCalculatorController(ILogger<ChangeCalculatorController> logger, IChangeHandler changeHandler,
-        IChangeCalculationToTransactionResponseMapper mapper, IOptions<List<Denomination>> options)
+        IChangeCalculationToTransactionResponseMapper mapper, IOptions<List<Denomination>> options,
+        IRequestValidator validator)
     {
         _logger = logger;
         _changeHandler = changeHandler;
         _mapper = mapper;
         _denominations = options.Value;
+        _validator = validator;
     }
 
     /// <summary>
@@ -25,24 +26,21 @@ public class ChangeCalculatorController : ControllerBase
     /// </summary>
     /// <response code="200">Returns a populated TransactionResponse</response>
     /// <response code="400">If the request is null or not formed correctly</response>
+    /// <response code="404">No change available or correct change not available</response>
     /// <response code="500">An unhandled exception occurred</response>
     [HttpPost()]
     public ActionResult Post([FromBody] TransactionRequest request)
     {
         try
         {
-            ValidateRequest(request);
-        }
-        catch (ValidationException ex)
-        {
-            return new BadRequestObjectResult(ex.Message);
-        }
-
-        try
-        {
+            _validator.ValidateRequest(request);
             var changeCalculation = _changeHandler.CalculateChange(request, _denominations);
             var transactionResponse = _mapper.Map(changeCalculation);
             return new OkObjectResult(transactionResponse);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            return new BadRequestObjectResult(ex.Message);
         }
         catch (TransactionFailedException ex)
         {
@@ -53,25 +51,6 @@ public class ChangeCalculatorController : ControllerBase
         {
             //TODO logging
             return new StatusCodeResult(500);
-        }
-    }
-
-    private void ValidateRequest(TransactionRequest request)
-    {
-        if (request == default(TransactionRequest))
-        {
-            throw new ValidationException("request parameter cannot be default");
-        }
-        var validator = new TransactionRequestValidator();
-        var results = validator.Validate(request);
-        if (!results.IsValid)
-        {
-            var failures = results.Errors.Select(err => err.ErrorMessage).ToArray();
-            throw new ValidationException((String.Join(" ", failures, 0, failures.Count())).Trim());
-        }
-        if (request.AmountOfCash < request.Cost)
-        {
-            throw new ValidationException("Not enough money to make the purchase");
         }
     }
 }
