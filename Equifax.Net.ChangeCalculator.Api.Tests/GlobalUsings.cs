@@ -14,3 +14,4 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using FakeItEasy;
 global using Microsoft.AspNetCore.Mvc;
+global using Equifax.Net.ChangeCalculator.Shared.Dtos;

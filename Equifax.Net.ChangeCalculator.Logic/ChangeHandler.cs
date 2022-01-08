@@ -4,10 +4,13 @@ public class ChangeHandler : IChangeHandler
 {
     public ChangeCalculation CalculateChange(TransactionRequest request, IEnumerable<Denomination> denominations)
     {
-        var transactionResponse = new ChangeCalculation(new Dictionary<Denomination, int>());
+        Guard.Against.DefaultTransactionRequest(request, nameof(request));
+        Guard.Against.Null(denominations, nameof(denominations));
+
+        var changeCalculation = new ChangeCalculation(new Dictionary<Denomination, int>());
         if (request.AmountOfCash == request.Cost)
         {
-            return transactionResponse;
+            return changeCalculation;
         }
         var remainingTotal = request.AmountOfCash - request.Cost;
         var availableDenominations = denominations.Where(d => d.Currency == request.Currency).OrderByDescending(d => d.Value);
@@ -21,13 +24,13 @@ public class ChangeHandler : IChangeHandler
             if (quantity >= 1)
             {
                 remainingTotal = remainingTotal - (denomination.Value * quantity);
-                transactionResponse.Change.Add(new Denomination(denomination.Currency, denomination.Description, denomination.Value), quantity);
+                changeCalculation.Change.Add(new Denomination(denomination.Currency, denomination.Description, denomination.Value), quantity);
             }
         }
         if (remainingTotal > 0.0m)
         {
             throw new TransactionFailedException("Correct change not available");
         }
-        return transactionResponse;
+        return changeCalculation;
     }
 }

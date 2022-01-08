@@ -171,6 +171,39 @@ public class ChangeHandlerTests : Xunit.Gherkin.Quick.Feature
         actualTotalChange.Should().Be(totalChange);
     }
 
+    [Fact]
+    public void CalculateChange_WithDefaultTransactionRequest_ThrowsArgumentException()
+    {
+        //arrange
+        var denominations = new List<Denomination>{
+            new Denomination{
+                Currency = "GBP",
+                Description = "1p",
+                Value = 0.01m
+            }
+        };
+
+        //act
+        Action act = () => _changeHandler.CalculateChange(default(TransactionRequest), denominations);
+
+        //assert
+        act.Should().Throw<ArgumentException>().WithMessage("Cannot be default. (Parameter 'request')");
+    }
+
+    [Fact]
+    public void CalculateChange_WithNullDenominations_ThrowsArgumentNullException()
+    {
+        //arrange
+        var request = new TransactionRequest("GBP", 2.0m, 1.0m);
+        List<Denomination>? denominations = null;
+
+        //act
+        Action act = () => _changeHandler.CalculateChange(request, denominations!);
+
+        //assert
+        act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'denominations')");
+    }
+
     private Denomination Denomination1 = new Denomination("GBP", "One Pence Coin", 0.01m);
     private Denomination Denomination2 = new Denomination("GBP", "Two Pence Coin", 0.02m);
     private Denomination Denomination5 = new Denomination("GBP", "Five Pence Coin", 0.05m);

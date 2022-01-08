@@ -6,3 +6,4 @@ global using System.Collections.Generic;
 global using FluentAssertions;
 global using Equifax.Net.ChangeCalculator.Shared.Exceptions;
 global using Equifax.Net.ChangeCalculator.Shared.Dtos;
+global using Xunit;

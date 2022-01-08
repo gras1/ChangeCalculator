@@ -4,12 +4,14 @@ public class ChangeCalculationToTransactionResponseMapper : IChangeCalculationTo
 {
     public TransactionResponse Map(ChangeCalculation changeCalculation)
     {
-        var changes = new List<string>();
+        Guard.Against.Null(changeCalculation, nameof(changeCalculation));
+
+        var change = new List<string>();
         foreach (var chg in changeCalculation.Change)
         {
-            changes.Add($"{chg.Value} x {chg.Key.Description}");
+            change.Add($"{chg.Value} x {chg.Key.Description}");
         }
 
-        return new TransactionResponse(changes);
+        return new TransactionResponse(change);
     }
 }

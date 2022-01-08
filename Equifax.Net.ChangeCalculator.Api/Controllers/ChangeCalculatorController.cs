@@ -20,6 +20,12 @@ public class ChangeCalculatorController : ControllerBase
         _denominations = options.Value;
     }
 
+    /// <summary>
+    /// Calculates the change for a given TransactionRequest containing a Currency, AmountOfCash and Cost
+    /// </summary>
+    /// <response code="200">Returns a populated TransactionResponse</response>
+    /// <response code="400">If the request is null or not formed correctly</response>
+    /// <response code="500">An unhandled exception occurred</response>
     [HttpPost()]
     public ActionResult Post([FromBody] TransactionRequest request)
     {
