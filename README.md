@@ -35,7 +35,10 @@ Example:
 3. Run the following command to install http-server:
 npm install http-server -g
 
-4. in a Terminal window cd in to the Experian.React.ChangeCalcuator.Web folder, to launch the HTTP server on port 8080 type:
+4. Before starting the http-server, you may need to temporarily increase your privledges, I did this in Powershell running as Administrator by typing the following (and saying "Yes to All" when prompted):
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+
+5. in a Terminal window cd in to the Experian.React.ChangeCalcuator.Web folder, to launch the HTTP server on port 8080 type:
 http-server
 
-5. in a browser, go to http://localhost:8080/index.html
+6. in a browser, go to http://localhost:8080/index.html
