@@ -100,9 +100,11 @@ TODO:
 1. Sort out 400 bad request CORS response issue, via proxy?
 2. Add logging
 3. Add quantities to denominations
-4. add some front-end input validation!
-5. front-end styling could be improved for the response
-6. Split out integration tests from unit tests in Api
-7. Add Jest unit tests for react front-end
-8. Async requests?
-9. Host in the cloud
+4. Add authorization / security to API controller method
+5. add some front-end input validation!
+6. front-end styling could be improved for the response
+7. Split out integration tests from unit tests in Api
+8. Add Jest unit tests for react front-end
+9. Async requests?
+10. Build pipeline
+11. Host in the cloud
